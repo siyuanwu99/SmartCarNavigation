@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<launch>
+
+	<!-- laser parameters -->
+	<arg name="laser_type" default="rplidar" doc=" define type of lidar "/>
+	<arg name="open_rviz" default="true" doc="whether to display rviz visualisation"/>
+	<arg name="auto_explore" default="true" doc="whether to explore the environ automatically" />
+	<arg name="xbox" default="true" doc="whether use xbox360 to control the robot" />
+  
+  
+	<!--launch laser driver -->
+	<include file="$(find turtlebot_navigation)/laser/driver/$(arg laser_type)_laser.launch" />
+
+	<!-- launch kobuki -->
+	<include file="$(find turtlebot_bringup)/launch/minimal.launch" />
+  
+  <!-- launch navigation -->
+  <include file="$(find clean_robot)/launch/turtlebot3_navigation.launch" />
+
+  <!-- teleop -->
+	<group if="$(arg xbox)">
+		<include file="$(find turtlebot_teleop)/launch/xbox360_teleop.launch" />
+	</group>
+	<group unless="$(arg xbox)">
+		<include file="$(find turtlebot_teleop)/launch/keyboard_teleop.launch" />
+	</group>
+
+</launch>

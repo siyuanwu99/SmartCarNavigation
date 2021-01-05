@@ -1,0 +1,28 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/home/siyuan/Desktop/workspace2/devel/include/**",
+                "/opt/ros/melodic/include/**",
+                "/home/siyuan/Desktop/workspace2/src/kobuki_bumper2pc/include/**",
+                "/home/siyuan/Desktop/workspace2/src/kobuki_keyop/include/**",
+                "/home/siyuan/Desktop/workspace2/src/kobuki_node/include/**",
+                "/home/siyuan/Desktop/workspace2/src/kobuki_safety_controller/include/**",
+                "/home/siyuan/Desktop/workspace2/src/turtlebot_apps/turtlebot_actions/include/**",
+                "/home/siyuan/Desktop/workspace2/src/yocs_cmd_vel_mux/include/**",
+                "/home/siyuan/Desktop/workspace2/src/yocs_controllers/include/**",
+                "/usr/include/**"
+            ],
+            "name": "ROS",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++14"
+        }
+    ],
+    "version": 4
+}

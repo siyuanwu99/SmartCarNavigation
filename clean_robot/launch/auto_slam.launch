@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<launch>
+
+	<!-- laser parameters -->
+	<arg name="laser_type" default="rplidar" doc=" define type of lidar "/>
+	<arg name="open_rviz" default="true" doc="whether to display rviz visualisation"/>
+	<arg name="auto_explore" default="true" doc="whether to explore the environ automatically" />
+	<arg name="xbox" default="false" doc="whether use xbox360 to control the robot" />
+
+	<!--launch laser driver -->
+	<include file="$(find turtlebot_navigation)/laser/driver/$(arg laser_type)_laser.launch" />
+
+	<!-- launch kobuki -->
+	<include file="$(find turtlebot_bringup)/launch/minimal.launch" />
+
+	<!-- move base -->
+	<!-- <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml" /> -->
+	<include file="$(find clean_robot)/launch/move_base.launch" />
+	
+	<!-- Exploration -->
+	<node pkg="explore_lite" type="explore" respawn="false" name="explore" output="screen">
+		<param name="robot_base_frame" value="base_footprint"/>
+		<param name="costmap_topic" value="map"/>
+		<!-- <param name="costmap_updates_topic" value="map_updates"/> -->
+		<param name="visualize" value="true"/>
+		<param name="planner_frequency" value="1.0"/>
+		<param name="progress_timeout" value="100.0"/>
+		<param name="potential_scale" value="3.0"/>
+		<param name="orientation_scale" value="0.0"/>
+		<param name="gain_scale" value="1.0"/>
+		<param name="transform_tolerance" value="0.3"/>
+		<param name="min_frontier_size" value="0.2"/>
+	</node>
+
+	<!-- launch karto_slam -->
+	<arg name="custom_karto_launch_file" default="$(find turtlebot_navigation)/launch/includes/karto/$(arg laser_type)_karto.launch.xml" />
+	<include file="$(arg custom_karto_launch_file)" />
+
+	<!-- rviz -->
+	<group if="$(arg open_rviz)">
+    	<node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find clean_robot)/rviz/turtlebot3_karto.rviz"/>
+  	</group>
+
+	<!-- 启动仿真环境
+	<include file="$(find clean_robot)/launch/gazebo.launch"/> -->
+
+
+	<!-- teleop -->
+	<group if="$(arg xbox)">
+		<include file="$(find turtlebot_teleop)/launch/xbox360_teleop.launch" />
+	</group>
+	<group unless="$(arg xbox)">
+		<include file="$(find turtlebot_teleop)/launch/keyboard_teleop.launch" />
+	</group>
+	
+</launch>

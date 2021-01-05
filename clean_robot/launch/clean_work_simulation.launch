@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="laser_type" default="rplidar" />
+    <arg name="open_rviz" default="true"/>
+
+    <!-- laser driver -->
+    <!-- <include file="$(find turtlebot_navigation)/laser/driver/$(arg laser_type)_laser.launch" /> -->
+
+    <!-- launch kobuki base -->
+    <!-- <include file="$(find turtlebot_bringup)/launch/minimal.launch" /> -->
+    
+    <include file="$(find clean_robot)/launch/gazebo.launch"/>
+    <!-- 启动导航系统，用作目标点路径规划，实现躲避小障碍物-->
+    <include file="$(find clean_robot)/launch/turtlebot3_navigation.launch" />
+    <!-- 清扫路径规划器 -->
+    <node pkg="clean_robot" type="path_planning_node" respawn="false" name="path_planning_node" output="screen" clear_params="true">
+        <rosparam file="$(find clean_robot)/config/costmap_common_params.yaml" command="load" ns="cleaning_costmap" />
+        <rosparam file="$(find clean_robot)/config/cleaning_costmap_params.yaml" command="load" />
+    </node>
+    <!-- 根据清扫的路径向导航系统发送目标点位 -->
+    <!-- 设定距离当前目标点多进时候发布下一个目标点 -->
+    <param name="/NextGoal/tolerance_goal" value="0.25" />
+    <node pkg="clean_robot" type="next_goal" respawn="true" name="next_goal" output="screen" />
+</launch>

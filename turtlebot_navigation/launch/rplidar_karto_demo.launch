@@ -1,0 +1,23 @@
+<launch>
+	<!-- define laeser type -->
+	<arg name="laser_type" default="rplidar" />
+	<arg name="open_rviz" default="true"/>
+
+	<!-- laser driver -->
+	<include file="$(find turtlebot_navigation)/laser/driver/$(arg laser_type)_laser.launch" />
+
+	<!-- launch kobuki -->
+	<include file="$(find turtlebot_bringup)/launch/minimal.launch" />
+
+	<!-- karto launch -->
+	<arg name="custom_karto_launch_file" default="$(find turtlebot_navigation)/launch/includes/karto/$(arg laser_type)_karto.launch.xml" />
+	<include file="$(arg custom_karto_launch_file)" />
+
+	<!-- move base -->
+	<include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml" />
+
+	<!-- rviz -->
+	<group if="$(arg open_rviz)">
+    	<node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find turtlebot_navigation)/rviz_temp/turtlebot_karto.rviz"/>
+  	</group>
+</launch>
